@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace WebApplicationTest.Models
+namespace TSD2491_Oblig1_255006.Models
 {
     public class GameViewModel
     {
