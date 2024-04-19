@@ -22,5 +22,6 @@ namespace TSD2491_Oblig1_255006.Models
         };
 
         public List<string> ShuffledAnimals { get; set; }
+        public int MatchesFound { get; set; }
     }
 }

@@ -27,8 +27,6 @@
 </style>
 
 
-
-
 <div class="text-center">
     <h1 class="display-4">TSD2491 - Oblig 1</h1>
 </div>
@@ -42,7 +40,7 @@
             var animal = Model.ShuffledAnimals[animalNumber];
             var uniqueDescription = $"Button #{animalNumber}";
             <div class="col-3">
-                <form method="post">
+                <form method="post" action="/Home/ButtonClick">
                     <input type="hidden" name="animal" value="@animal" />
                     <input type="hidden" name="animalDescription" value="@uniqueDescription" />
                     <button type="submit" class="btn btn-outline-dark">
@@ -51,5 +49,8 @@
                 </form>
             </div>
         }
+    </div>
+    <div class="row">
+        <h2>Matches found: @Model.MatchesFound</h2>
     </div>
 </div>
