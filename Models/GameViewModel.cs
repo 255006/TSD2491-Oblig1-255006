@@ -20,5 +20,7 @@ namespace TSD2491_Oblig1_255006.Models
         {
             animalEmoij,
         };
+
+        public List<string> ShuffledAnimals { get; set; }
     }
 }

@@ -1,7 +1,55 @@
-﻿@{
+﻿@model GameViewModel
+@{
     ViewData["Title"] = " TSD2491 – Oblig1";
 }
 
+<style>
+    .container {
+        width: 400px;
+    }
+
+    button {
+        width: 100px;
+        height: 100px;
+        font-size: 50px;
+    }
+
+    .header-container {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .row {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+</style>
+
+
+
+
 <div class="text-center">
     <h1 class="display-4">TSD2491 - Oblig 1</h1>
+</div>
+
+<div class="container">
+    <h1 class="header-container">Matching Game</h1>
+
+    <div class="row">
+        @for (var animalNumber = 0; animalNumber < Model.ShuffledAnimals.Count; animalNumber++)
+        {
+            var animal = Model.ShuffledAnimals[animalNumber];
+            var uniqueDescription = $"Button #{animalNumber}";
+            <div class="col-3">
+                <form method="post">
+                    <input type="hidden" name="animal" value="@animal" />
+                    <input type="hidden" name="animalDescription" value="@uniqueDescription" />
+                    <button type="submit" class="btn btn-outline-dark">
+                        <h1>@animal</h1>
+                    </button>
+                </form>
+            </div>
+        }
+    </div>
 </div>

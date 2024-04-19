@@ -6,27 +6,37 @@ namespace TSD2491_Oblig1_255006.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+        private static List<List<string>> emoijList = GameViewModel.emoijLists;
+        private static List<string> shuffledAnimals = new List<string>();
 
         public IActionResult Index()
         {
-            return View();
+            SetUpGameIfNeeded();
+            var model = new GameViewModel
+            {
+                ShuffledAnimals = shuffledAnimals,
+            };
+
+            return View(model);
         }
 
-        public IActionResult Privacy()
+        private void SetUpGameIfNeeded()
         {
-            return View();
+            // Check if the game is set up
+            if (HttpContext.Session.GetString("isGameSetUp") == null)
+            {
+                SetUpGame();
+                HttpContext.Session.SetString("isGameSetUp", "true"); // Set the game as started
+            }
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        private void SetUpGame()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            Random random = new Random();
+            int randomListNumber = random.Next(0, emoijList.Count);
+
+            shuffledAnimals = emoijList[randomListNumber].OrderBy(item => random.Next()).ToList();
         }
+
     }
 }

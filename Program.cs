@@ -3,6 +3,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set the time for session timout as 30 min
+    options.Cookie.HttpOnly = true; // Secure the cookies
+    options.Cookie.IsEssential = true; // Set cookies as essential
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -20,8 +27,14 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+// IMPORTANT: This needs to be called before UseEndpoints()
+app.UseSession(); // Enable session middleware
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+});
 
 app.Run();
