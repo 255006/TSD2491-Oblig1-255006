@@ -5,6 +5,7 @@ namespace TSD2491_Oblig1_255006.Models
     public class GameViewModel
     {
         public string GameState { get; set; } // "running", "completed", "notStarted"
+        public List<Player> Players { get; set; } = new List<Player>(); // Player list
 
         public static List<string> animalEmoij = new List<string>
         {

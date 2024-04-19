@@ -24,6 +24,21 @@
         margin-bottom: 10px;
     }
 
+    .small-button {
+        width: 150px;
+        height: 50px;
+        font-size: 16px;
+    }
+
+    ol {
+        list-style-type: decimal;
+        padding-left: 20px;
+    }
+
+        ol > li {
+            margin-bottom: 10px;
+        }
+
 </style>
 
 
@@ -66,5 +81,18 @@
         {
             <h3>START GAME</h3>
         }
+    </div>
+    <form method="post" action="/Home/Register">
+        <input type="text" name="playerName" placeholder="Enter your name" required />
+        <button type="submit" class="small-button">Register</button>
+    </form>
+
+    <div class="row">
+        <ol>
+            @foreach (var player in Model.Players.OrderByDescending(p => p.GamesPlayed))
+            {
+                <li>@player.Name - Games Played: @player.GamesPlayed</li>
+            }
+        </ol>
     </div>
 </div>

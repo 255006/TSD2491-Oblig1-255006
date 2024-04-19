@@ -8,6 +8,7 @@ namespace TSD2491_Oblig1_255006.Controllers
     {
         private static List<List<string>> emoijList = GameViewModel.emoijLists;
         private static List<string> shuffledAnimals = new List<string>();
+        private static List<Player> registeredPlayers = new List<Player>();
         private static int matchesFound = 0;
 
         public IActionResult Index()
@@ -21,6 +22,7 @@ namespace TSD2491_Oblig1_255006.Controllers
                 ShuffledAnimals = shuffledAnimals,
                 MatchesFound = matchesFound,
                 GameState = gameState, // This is the text "GAME RUNNING", "GAME COMPLETED", "START GAME"
+                Players = registeredPlayers,
             };
 
             return View(model);
@@ -61,6 +63,14 @@ namespace TSD2491_Oblig1_255006.Controllers
                         SetUpGame(); // Restart game
                         HttpContext.Session.SetString("gameState", "completed");
 
+                        // Logic for getting current player from session.
+                        var playerName = HttpContext.Session.GetString("currentPlayer");
+                        var player = registeredPlayers.FirstOrDefault(p => p.Name == playerName);
+                        if (player != null)
+                        {
+                            player.GamesPlayed++;
+                        }
+
                     }
                     else
                     {
@@ -74,6 +84,24 @@ namespace TSD2491_Oblig1_255006.Controllers
                     HttpContext.Session.SetString("lastAnimalFound", string.Empty);
                     HttpContext.Session.SetString("lastDescription", string.Empty);
                 }
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Register(string playerName)
+        {
+            if (!string.IsNullOrEmpty(playerName))
+            {
+                // Check if player already exists
+                var player = registeredPlayers.FirstOrDefault(p => p.Name == playerName);
+                if (player == null)
+                {
+                    // If player does not exist, add him to list 
+                    registeredPlayers.Add(new Player { Name = playerName, GamesPlayed = 0 });
+                }
+                // Set players name in session
+                HttpContext.Session.SetString("currentPlayer", playerName);
             }
 
             return RedirectToAction("Index");
