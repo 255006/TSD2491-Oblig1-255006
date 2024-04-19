@@ -13,10 +13,14 @@ namespace TSD2491_Oblig1_255006.Controllers
         public IActionResult Index()
         {
             SetUpGameIfNeeded();
+
+            var gameState = HttpContext.Session.GetString("gameState") ?? "notStarted"; // Get the game state from session
+
             var model = new GameViewModel
             {
                 ShuffledAnimals = shuffledAnimals,
                 MatchesFound = matchesFound,
+                GameState = gameState, // This is the text "GAME RUNNING", "GAME COMPLETED", "START GAME"
             };
 
             return View(model);
@@ -31,6 +35,7 @@ namespace TSD2491_Oblig1_255006.Controllers
 
             if (string.IsNullOrEmpty(lastAnimalFound))
             {
+                HttpContext.Session.SetString("gameState", "running");
                 // If this is your first click, save the selected animal and its description in the session
                 if (!string.IsNullOrEmpty(animal))
                 {
@@ -54,6 +59,7 @@ namespace TSD2491_Oblig1_255006.Controllers
                     if (matchesFound == 8)
                     {
                         SetUpGame(); // Restart game
+                        HttpContext.Session.SetString("gameState", "completed");
 
                     }
                     else
@@ -75,11 +81,17 @@ namespace TSD2491_Oblig1_255006.Controllers
 
         private void SetUpGameIfNeeded()
         {
-            // Check if the game is set up
+            // Game logic checking if game is set up
             if (HttpContext.Session.GetString("isGameSetUp") == null)
             {
                 SetUpGame();
-                HttpContext.Session.SetString("isGameSetUp", "true"); // Set the game as started
+                HttpContext.Session.SetString("isGameSetUp", "true"); // Game is set up 
+                HttpContext.Session.SetString("gameState", "notStarted"); // Set game as not started yet "START GAME" text
+            }
+            else
+            {
+                var currentState = HttpContext.Session.GetString("gameState") ?? "notStarted";
+                HttpContext.Session.SetString("gameState", currentState);
             }
         }
 
@@ -91,6 +103,7 @@ namespace TSD2491_Oblig1_255006.Controllers
             shuffledAnimals = emoijList[randomListNumber].OrderBy(item => random.Next()).ToList();
 
             matchesFound = 0;
+            HttpContext.Session.SetString("gameState", "running");
         }
 
     }

@@ -53,4 +53,18 @@
     <div class="row">
         <h2>Matches found: @Model.MatchesFound</h2>
     </div>
+    <div class="row">
+        @if (Model.GameState == "running")
+        {
+            <h3>GAME RUNNING</h3>
+        }
+        else if (Model.GameState == "completed")
+        {
+            <h3>GAME COMPLETED</h3>
+        }
+        else if (Model.GameState == "notStarted")
+        {
+            <h3>START GAME</h3>
+        }
+    </div>
 </div>
